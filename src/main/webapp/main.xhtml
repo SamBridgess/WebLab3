@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html>
+<html   xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:ace="http://www.icefaces.org/icefaces/components"
+        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<h:head>
+    <meta charset="UTF-8" />
+    <title>WebLab3 Миняев Илья</title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <h:outputScript library="js" name="timeFormatter.js" target="body"/>
+    <h:outputScript library="js" name="graphClick.js" target="body"/>
+</h:head>
+
+<h:body style="background-color: #360c36">
+    <!-- name and group -->
+    <header id="header" style="margin-bottom: 2%;">
+        <span>Миняев Илья P32312 Вариант: 3231245</span>
+    </header>
+
+    <!-- Main data -->
+    <div class="main" style="display:flex; justify-content: center;">
+        <!-- Form to send -->
+        <div>
+            <h:form id="forms">
+
+                <div class="form">
+                    <div class="values">
+                        <!-- X value block -->
+                        <div class="X_value">
+                            <ace:sliderEntry id="x" label="X:" labelPosition="left" min="-6" max="6" stepPercent="8.33333" value="#{formPoint.x}">
+                                <ace:ajax event="slide" execute="@this" render="submit xSliderValueOutput x-warning"/>
+                            </ace:sliderEntry>
+                            <p style="text-align: center;"><h:outputText id="xSliderValueOutput" value="#{formPoint.x / 2}"/></p>
+                        </div>
+
+                        <!-- Y value block -->
+                        <div class="Y_value" style="margin-bottom: 20px;">
+                            <div>
+                                <h:outputLabel for="y" style="margin-right: 10px">Y:</h:outputLabel>
+                                <h:inputText id="y" value="#{formPoint.y}" pt:placeholder="0" maxlength="10">
+                                    <f:ajax event="keyup" render="submit y-warning" execute="y"/>
+                                </h:inputText>
+                            </div>
+                        </div>
+
+                        <!-- R value block -->
+                        <div class="R_value">
+                            <ace:sliderEntry id="r" label="R:" labelPosition="left" min="0" max="12" stepPercent="8.33333" value="#{formPoint.r}">
+                                <ace:ajax event="slide" execute="@this" render="submit rSliderValueOutput r-warning graph"/>
+                            </ace:sliderEntry>
+                            <p style="text-align: center;"><h:outputText id="rSliderValueOutput" value="#{formPoint.r / 4 + 2}"/></p>
+                        </div>
+
+                        <!-- Buttons reset and submit block -->
+                        <div class="buttons">
+                            <h:commandButton id="submit" value="Submit" disabled="#{!formPoint.valid}" action="#{formPoint.submit}">
+                                <f:ajax execute="@form" render="@form table graph"/>
+                            </h:commandButton>
+                            <h:commandButton id="clear" value="Clear attempts" action="#{attempts.clear}">
+                                <f:ajax execute="@this" render="@form table graph"/>
+                            </h:commandButton>
+                            <h:commandButton id="index" value="Go to index" action="toIndex" />
+                        </div>
+                    </div>
+
+                    <div class="Error_text" style="margin: 5%; display:grid;">
+                        <span id="x_error"><h:outputText id="x-warning" value="#{formPoint.XMsg}"/></span>
+                        <span id="y_error"><h:outputText id="y-warning" value="#{formPoint.YMsg}"/></span>
+                        <span id="r_error"><h:outputText id="r-warning" value="#{formPoint.RMsg}"/></span>
+                    </div>
+                </div>
+            </h:form>
+            <h:form id="graph-form" style="display:none;">
+                <h:inputHidden id="hidden-x" value="#{graphPoint.x}"/>
+                <h:inputHidden id="hidden-y" value="#{graphPoint.y}"/>
+                <h:inputHidden id="hidden-r" value="#{graphPoint.r}"/>
+                <h:commandButton id="hidden-submit" action="#{graphPoint.submit}">
+                    <f:ajax execute="@form" render="@form table graph"/>
+                </h:commandButton>
+            </h:form>
+        </div>
+
+        <!-- graphic -->
+        <h:panelGroup style="margin-left: 6%;" layout="block" id="graph">
+            <!-- Coordinates -->
+            <svg width="300" height="300" style="background-color:white" id="graph-canvas">
+
+                <line x1="0" x2="300" y1="150" y2="150"  stroke="black"></line>
+                <line x1="150" x2="150" y1="0" y2="300" stroke="black"></line>
+
+                <polygon points="150,0 145,15 155,15" stroke="black"></polygon>
+                <polygon points="300,150 285,145 285,155" stroke="black"></polygon>
+
+                <line x1="50" x2="50" y1="140" y2="160"></line>
+                <line x1="100" x2="100" y1="140" y2="160"></line>
+                <line x1="200" x2="200" y1="140" y2="160"></line>
+                <line x1="250" x2="250" y1="140" y2="160"></line>
+
+                <line x1="140" x2="160" y1="50" y2="50"></line>
+                <line x1="140" x2="160" y1="100" y2="100"></line>
+                <line x1="140" x2="160" y1="200" y2="200"></line>
+                <line x1="140" x2="160" y1="250" y2="250"></line>
+                <!-- Rectangle -->
+                <polygon stroke="purple" fill="purple" fill-opacity="0.3" points="150,250 150,150 250,150 250,250"></polygon>
+                <!-- Tringle -->
+                <polygon stroke="purple" fill="purple" fill-opacity="0.3" points="150,100 150,150  200,150"></polygon>
+                <!-- dots -->
+                <circle cx="50" cy="150" r="1" stroke="black" stroke-width="3" />
+                <circle cx="150" cy="50" r="1" stroke="black" stroke-width="3" />
+                <circle cx="150" cy="100" r="1" stroke="black" stroke-width="3" />
+                <circle cx="150" cy="150" r="1" stroke="black" stroke-width="3" />
+                <circle cx="200" cy="150" r="1" stroke="black" stroke-width="3" />
+                <circle cx="100" cy="150" r="1" stroke="black" stroke-width="3" />
+                <circle cx="150" cy="200" r="1" stroke="black" stroke-width="3" />
+                <circle cx="250" cy="150" r="1" stroke="black" stroke-width="3" />
+                <circle cx="150" cy="250" r="1" stroke="black" stroke-width="3" />
+                <!-- Circle -->
+                <path stroke="purple" fill="purple" fill-opacity="0.3" d="M150,100 A50,50 90 0,0 100,150 L 150,150 Z"></path>
+
+                <text x="285" y="135">X</text>
+                <text x="160" y="15">Y</text>
+
+                <text x="40" y="130">-R</text>
+                <text x="85" y="130">-R/2</text>
+                <text x="190" y="130">R/2</text>
+                <text x="245" y="130">R</text>
+
+                <text x="170" y="52.5">R</text>
+                <text x="170" y="102.5">R/2</text>
+                <text x="170" y="202.5">-R/2</text>
+                <text x="170" y="252.5">-R</text>
+
+                <ui:repeat value="#{attempts.attempts}" var="i">
+                    <circle
+                            r="1"
+                            cx="#{(i.x / ((formPoint.r / 4 + 2) * 3) + 0.5) * 300}"
+                            cy="#{300 - (i.y / ((formPoint.r / 4 + 2) * 3) + 0.5) * 300}"
+                            stroke="#{i.success ? 'green' : 'red'}"
+                            stroke-width="3"
+                    />
+                </ui:repeat>
+            </svg>
+        </h:panelGroup>
+    </div>
+    <!-- table blocks -->
+    <div style="display: grid; justify-items: center; align-content: flex-start;">
+        <h:form id="table">
+            <ace:dataTable
+                var="i"
+                value="#{attempts.attempts}"
+            >
+                <ace:column headerText="ID">
+                    <h:outputText value="#{i.id}"/>
+                </ace:column>
+
+                <ace:column headerText="X">
+                    <h:outputText value="#{i.x}" />
+                </ace:column>
+
+                <ace:column headerText="Y">
+                    <h:outputText value="#{i.y}"/>
+                </ace:column>
+
+                <ace:column headerText="R">
+                    <h:outputText value="#{i.r}"/>
+                </ace:column>
+
+                <ace:column headerText="Result">
+                    <h:outputText value="#{(i.success ? 'HIT' : 'MISS')}"/>
+                </ace:column>
+
+                <ace:column headerText="Attempt Time">
+                    <h:outputText value="#{i.attemptTime}" styleClass="format-time"/>
+                </ace:column>
+
+                <ace:column headerText="Process Time">
+                    <h:outputText value="#{i.processTime} ms"/>
+                </ace:column>
+            </ace:dataTable>
+        </h:form>
+    </div>
+</h:body>
+
+</html>

@@ -1,0 +1,78 @@
+#header{
+    width:fit-content;
+    padding: 3%;
+    margin: auto;
+    font-family: serif, sans-serif;
+    color: #EC5552;
+    font-size: 30px;
+    display: grid;
+    text-align: center;
+    border: 1px solid;
+
+}
+#forms{
+    border: 1px solid;
+    width: 230px;
+    height: 450px;
+    padding: 5%;
+    margin-bottom: 10%;
+    background-color: #a46eb0;
+}
+#main > div{
+    margin: 10px;
+}
+#submit{
+    margin-left: 9%;
+}
+#reset{
+    margin-left: 26%;
+}
+#Y_value, #R_value{
+    width: 150px;
+}
+#cleaner{
+    margin: 1%;
+}
+.buttons{
+    margin: 3%;
+}
+table {
+    font-family: serif, sans-serif;
+    border-collapse: collapse;
+}
+
+td, th {
+    background-color: #a46eb0;
+    text-align: left;
+    padding: 8px;
+}
+
+.ui-widget-header {
+    border: none;
+}
+
+table tr:first-child th:first-child {
+    border-top-left-radius: 6px;
+}
+
+/* top-right border-radius */
+table tr:first-child th:last-child {
+    border-top-right-radius: 6px;
+}
+
+/* bottom-left border-radius */
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 6px;
+}
+
+/* bottom-right border-radius */
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 6px;
+}
+
+input::placeholder{
+    color: #2e3131 ;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
